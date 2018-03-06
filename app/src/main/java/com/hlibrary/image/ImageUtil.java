@@ -37,7 +37,7 @@ public class ImageUtil {
      */
     public static void displayBitmap(Context context, int emptyRes, int failureRes,
                                      RoundingParams imageStyle, String url, HImageView imgvw) {
-        Logger.i(TAG, url);
+        Logger.getInstance().i(TAG, url);
         ImageManager.getFrescoAction(context).loadCustomImg(imgvw, url, imageStyle, failureRes, emptyRes);
     }
 

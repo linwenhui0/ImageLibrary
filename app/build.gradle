@@ -19,8 +19,9 @@ android {
 }
 
 dependencies {
-    compile 'com.facebook.fresco:fresco:1.0.1'
-    compile 'com.github.linwenhui0:UtilLibary:0.0.2'
+    compileOnly 'com.android.support:support-v4:27.1.0'
+    implementation 'com.facebook.fresco:fresco:1.0.1'
+    compileOnly 'com.github.linwenhui0:UtilLibary:0.0.8'
 }
 
 def getRepositoryUsername() {
