@@ -1,9 +1,10 @@
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
 apply plugin: 'maven'
 
 android {
     compileSdkVersion 27
-    buildToolsVersion '27.0.1'
+    buildToolsVersion '27.0.3'
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 25
@@ -19,9 +20,13 @@ android {
 }
 
 dependencies {
-    compileOnly 'com.android.support:support-v4:27.1.0'
-    implementation 'com.facebook.fresco:fresco:1.0.1'
-    compileOnly 'com.github.linwenhui0:UtilLibary:0.0.8'
+    compileOnly 'com.android.support:support-v4:27.1.1'
+    implementation ('com.facebook.fresco:fresco:1.10.0'){
+        exclude module: 'support-v4'
+    }
+    implementation 'com.facebook.fresco:animated-gif:1.10.0'
+    compileOnly 'com.hlibary.util:utillibary:0.0.1.2-SNAPSHOT'
+    compileOnly "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 
 def getRepositoryUsername() {

@@ -2,7 +2,6 @@ package com.hlibrary.image.fresco;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Animatable;
 import android.net.Uri;
 import android.support.v4.content.ContextCompat;
 
@@ -10,8 +9,6 @@ import com.facebook.cache.disk.DiskCacheConfig;
 import com.facebook.common.internal.Supplier;
 import com.facebook.common.util.ByteConstants;
 import com.facebook.drawee.backends.pipeline.Fresco;
-import com.facebook.drawee.controller.BaseControllerListener;
-import com.facebook.drawee.controller.ControllerListener;
 import com.facebook.drawee.drawable.ScalingUtils;
 import com.facebook.drawee.generic.GenericDraweeHierarchy;
 import com.facebook.drawee.generic.GenericDraweeHierarchyBuilder;
@@ -24,7 +21,9 @@ import com.facebook.imagepipeline.common.ResizeOptions;
 import com.facebook.imagepipeline.core.ImagePipelineConfig;
 import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
+import com.hlibrary.image.view.HImageView;
 import com.hlibrary.image.R;
+import com.hlibrary.image.fresco.controller.CalHeightController;
 import com.hlibrary.util.SDUtil;
 import com.hlibrary.util.file.FileManager;
 
@@ -59,7 +58,6 @@ public class FrescoConfig {
         }
         return sImagePipelineConfig;
     }
-
 
 
     /**
@@ -167,46 +165,33 @@ public class FrescoConfig {
      */
     public static GenericDraweeHierarchy getCustomPlaceholderGenericDraweeHierarchy(Context context, RoundingParams roundingParams, int iconPlaceHolderID, int iconFailureId) {
         GenericDraweeHierarchyBuilder gdhBuilder = new GenericDraweeHierarchyBuilder(context.getResources());
+        gdhBuilder.setActualImageScaleType(ScalingUtils.ScaleType.FIT_CENTER);
         if (roundingParams != null)
             gdhBuilder.setRoundingParams(roundingParams);
         if (iconFailureId > 0)
-            gdhBuilder.setFailureImage(ContextCompat.getDrawable(context, iconFailureId), ScalingUtils.ScaleType.FIT_XY);
+            gdhBuilder.setFailureImage(ContextCompat.getDrawable(context, iconFailureId), ScalingUtils.ScaleType.FIT_CENTER);
         if (iconPlaceHolderID > 0)
-            gdhBuilder.setPlaceholderImage(ContextCompat.getDrawable(context, iconPlaceHolderID), ScalingUtils.ScaleType.FIT_XY);
+            gdhBuilder.setPlaceholderImage(ContextCompat.getDrawable(context, iconPlaceHolderID), ScalingUtils.ScaleType.FIT_CENTER);
         return gdhBuilder.setFadeDuration(1000).build();
     }
 
-    public static DraweeController getDraweeController(String url) {
+    public static DraweeController getDraweeController(HImageView imageView, String url) {
         DraweeController draweeController = Fresco.newDraweeControllerBuilder()
                 .setUri(Uri.parse(url))
                 .setAutoPlayAnimations(true)
-//                .setControllerListener(listener)
+                .setControllerListener(new CalHeightController(imageView))
                 .build();
         return draweeController;
     }
 
-    /**
-     * Monitor image loading process
-     */
-    private static ControllerListener listener = new BaseControllerListener() {
-        @Override
-        public void onFinalImageSet(String id, Object imageInfo, Animatable animatable) {
-            super.onFinalImageSet(id, imageInfo, animatable);
-            //success
-        }
-
-        @Override
-        public void onFailure(String id, Throwable throwable) {
-            super.onFailure(id, throwable);
-            //fail
-        }
-
-        @Override
-        public void onIntermediateImageFailed(String id, Throwable throwable) {
-            super.onIntermediateImageFailed(id, throwable);
-            //loading
-        }
-    };
+    public static DraweeController getDraweeController(HImageView imageView, File file) {
+        DraweeController draweeController = Fresco.newDraweeControllerBuilder()
+                .setUri(Uri.fromFile(file))
+                .setAutoPlayAnimations(true)
+                .setControllerListener(new CalHeightController(imageView))
+                .build();
+        return draweeController;
+    }
 
 
     /**

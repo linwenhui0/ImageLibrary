@@ -1,4 +1,4 @@
-package com.hlibrary.image;
+package com.hlibrary.image.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -11,6 +11,7 @@ import com.facebook.drawee.view.SimpleDraweeView;
  */
 
 public class HImageView extends SimpleDraweeView {
+
     public HImageView(Context context, GenericDraweeHierarchy hierarchy) {
         super(context, hierarchy);
     }
