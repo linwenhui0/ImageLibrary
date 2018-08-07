@@ -4,6 +4,7 @@ import android.graphics.drawable.Animatable
 import android.view.ViewGroup
 import com.facebook.drawee.controller.BaseControllerListener
 import com.facebook.imagepipeline.image.ImageInfo
+import com.hlibrary.image.ImageManager
 import com.hlibrary.image.view.HImageView
 import com.hlibrary.util.Logger
 
@@ -18,20 +19,22 @@ class CalHeightController : BaseControllerListener<ImageInfo> {
         super.onFinalImageSet(id, imageInfo, animatable)
         if (imageInfo == null)
             return
-        Logger.getInstance().defaultTagD("imageInfo , width : ", imageInfo.width, " , heigth = ", imageInfo.height)
+        if (ImageManager.debug)
+            Logger.getInstance().defaultTagD("imageInfo , width : ", imageInfo.width, " , heigth = ", imageInfo.height)
         var layoutParams = view?.layoutParams
-        if (layoutParams != null) {
-            Logger.getInstance().defaultTagD("view layout , width : ", layoutParams.width, " , heigth = ",
-                    layoutParams.height)
-            if (layoutParams.height == ViewGroup.LayoutParams.WRAP_CONTENT) {
-                var widgetWidth = view?.width!!
-                var height: Int = imageInfo.height
-                var width: Int = imageInfo.width
-                layoutParams.width = widgetWidth
-                layoutParams.height = ((widgetWidth * height).toFloat() / width).toInt()
+        if (layoutParams != null && layoutParams.height == ViewGroup.LayoutParams.WRAP_CONTENT) {
+            var widgetWidth = view?.width!!
+            if (widgetWidth <= 0)
+                widgetWidth = view?.measuredWidth!!
+            if (widgetWidth == 0)
+                return
+            var height: Int = imageInfo.height
+            var width: Int = imageInfo.width
+            layoutParams.width = widgetWidth
+            layoutParams.height = ((widgetWidth * height).toFloat() / width).toInt()
+            if (ImageManager.debug)
                 Logger.getInstance().defaultTagD("view layout , width : ", layoutParams.width, " , heigth = ", layoutParams.height)
-                view?.layoutParams = layoutParams
-            }
+            view?.layoutParams = layoutParams
         }
     }
 }

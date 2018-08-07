@@ -3,6 +3,7 @@ package com.hlibrary.image.fresco;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.support.v4.content.ContextCompat;
 
 import com.facebook.cache.disk.DiskCacheConfig;
@@ -15,19 +16,23 @@ import com.facebook.drawee.generic.GenericDraweeHierarchyBuilder;
 import com.facebook.drawee.generic.RoundingParams;
 import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.DraweeView;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.facebook.imagepipeline.cache.MemoryCacheParams;
 import com.facebook.imagepipeline.common.ImageDecodeOptions;
 import com.facebook.imagepipeline.common.ResizeOptions;
 import com.facebook.imagepipeline.core.ImagePipelineConfig;
 import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
-import com.hlibrary.image.view.HImageView;
 import com.hlibrary.image.R;
 import com.hlibrary.image.fresco.controller.CalHeightController;
+import com.hlibrary.image.view.HImageView;
 import com.hlibrary.util.SDUtil;
 import com.hlibrary.util.file.FileManager;
 
 import java.io.File;
+
+import jp.wasabeef.fresco.processors.CombinePostProcessors;
+import jp.wasabeef.fresco.processors.GrayscalePostprocessor;
 
 
 /**
@@ -175,9 +180,57 @@ public class FrescoConfig {
         return gdhBuilder.setFadeDuration(1000).build();
     }
 
+    /**
+     * 构建、获取ImageRequest
+     *
+     * @param uri              加载路径
+     * @param simpleDraweeView 加载的图片控件
+     * @return ImageRequest
+     */
+    public static ImageRequest getImageRequest(Uri uri, SimpleDraweeView simpleDraweeView) {
+
+        int width = 300;
+        int height = 300;
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+            if (simpleDraweeView != null) {
+                width = simpleDraweeView.getWidth();
+                height = simpleDraweeView.getHeight();
+            }
+        } else {
+            if (simpleDraweeView != null) {
+                width = simpleDraweeView.getMaxWidth();
+                height = simpleDraweeView.getMaxHeight();
+            }
+        }
+
+        //根据请求路径生成ImageRequest的构造者
+        ImageRequestBuilder builder = ImageRequestBuilder.newBuilderWithSource(uri);
+        //调整解码图片的大小
+        if (width > 0 && height > 0) {
+            builder.setResizeOptions(new ResizeOptions(width, height));
+        }
+        //设置是否开启渐进式加载，仅支持JPEG图片
+        builder.setProgressiveRenderingEnabled(true);
+
+        //图片变换处理
+        CombinePostProcessors.Builder processorBuilder = new CombinePostProcessors.Builder();
+        //加入模糊变换
+//        processorBuilder.add(new BlurPostprocessor(context, radius));
+        //加入灰白变换
+        processorBuilder.add(new GrayscalePostprocessor());
+        //应用加入的变换
+        builder.setPostprocessor(processorBuilder.build());
+        //更多图片变换请查看https://github.com/wasabeef/fresco-processors
+        return builder.build();
+    }
+
+
+
     public static DraweeController getDraweeController(HImageView imageView, String url) {
+        Uri uri = Uri.parse(url);
         DraweeController draweeController = Fresco.newDraweeControllerBuilder()
-                .setUri(Uri.parse(url))
+                .setImageRequest(getImageRequest(uri, imageView))
+                .setUri(uri)
                 .setAutoPlayAnimations(true)
                 .setControllerListener(new CalHeightController(imageView))
                 .build();
@@ -185,8 +238,10 @@ public class FrescoConfig {
     }
 
     public static DraweeController getDraweeController(HImageView imageView, File file) {
+        Uri uri = Uri.fromFile(file);
         DraweeController draweeController = Fresco.newDraweeControllerBuilder()
-                .setUri(Uri.fromFile(file))
+                .setImageRequest(getImageRequest(uri, imageView))
+                .setUri(uri)
                 .setAutoPlayAnimations(true)
                 .setControllerListener(new CalHeightController(imageView))
                 .build();

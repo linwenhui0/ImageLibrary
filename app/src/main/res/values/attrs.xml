@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="HImageView">
+        <attr name="circle" format="boolean|reference"/>
+        <attr name="loadNetImage" format="string|reference"/>
+        <attr name="cornersRadius" format="float|reference"/>
+    </declare-styleable>
+</resources>
