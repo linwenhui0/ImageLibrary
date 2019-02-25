@@ -26,8 +26,8 @@ import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.hlibrary.image.R;
 import com.hlibrary.image.fresco.controller.CalHeightController;
 import com.hlibrary.image.view.HImageView;
-import com.hlibrary.util.SDUtil;
 import com.hlibrary.util.file.FileManager;
+import com.hlibrary.util.file.SdUtil;
 
 import java.io.File;
 
@@ -36,23 +36,52 @@ import jp.wasabeef.fresco.processors.GrayscalePostprocessor;
 
 
 /**
- * Created by danni on 2016/7/9.
+ * @author linwenhui
+ * @date 2016/7/9
  */
 public class FrescoConfig {
-    private static final int MAX_HEAP_SIZE = (int) Runtime.getRuntime().maxMemory();//分配的可用内存
-    public static final int MAX_MEMORY_CACHE_SIZE = MAX_HEAP_SIZE / 4;//使用的缓存数量
+    /**
+     * 分配的可用内存
+     */
+    private static final int MAX_HEAP_SIZE = (int) Runtime.getRuntime().maxMemory();
+    /**
+     * 使用的缓存数量
+     */
+    public static final int MAX_MEMORY_CACHE_SIZE = MAX_HEAP_SIZE / 4;
 
-    public static final int MAX_SMALL_DISK_VERYLOW_CACHE_SIZE = 5 * ByteConstants.MB;//小图极低磁盘空间缓存的最大值（特性：可将大量的小图放到额外放在另一个磁盘空间防止大图占用磁盘空间而删除了大量的小图）
-    public static final int MAX_SMALL_DISK_LOW_CACHE_SIZE = 10 * ByteConstants.MB;//小图低磁盘空间缓存的最大值（特性：可将大量的小图放到额外放在另一个磁盘空间防止大图占用磁盘空间而删除了大量的小图）
-    public static final int MAX_SMALL_DISK_CACHE_SIZE = 20 * ByteConstants.MB;//小图磁盘缓存的最大值（特性：可将大量的小图放到额外放在另一个磁盘空间防止大图占用磁盘空间而删除了大量的小图）
+    /**
+     * 小图极低磁盘空间缓存的最大值（特性：可将大量的小图放到额外放在另一个磁盘空间防止大图占用磁盘空间而删除了大量的小图）
+     */
+    public static final int MAX_SMALL_DISK_VERYLOW_CACHE_SIZE = 5 * ByteConstants.MB;
+    /**
+     * 小图低磁盘空间缓存的最大值（特性：可将大量的小图放到额外放在另一个磁盘空间防止大图占用磁盘空间而删除了大量的小图）
+     */
+    public static final int MAX_SMALL_DISK_LOW_CACHE_SIZE = 10 * ByteConstants.MB;
+    /**
+     * 小图磁盘缓存的最大值（特性：可将大量的小图放到额外放在另一个磁盘空间防止大图占用磁盘空间而删除了大量的小图）
+     */
+    public static final int MAX_SMALL_DISK_CACHE_SIZE = 20 * ByteConstants.MB;
+    /**
+     * 默认图极低磁盘空间缓存的最大值
+     */
+    public static final int MAX_DISK_CACHE_VERYLOW_SIZE = 10 * ByteConstants.MB;
+    /**
+     * 默认图低磁盘空间缓存的最大值
+     */
+    public static final int MAX_DISK_CACHE_LOW_SIZE = 30 * ByteConstants.MB;
+    /**
+     * 默认图磁盘缓存的最大值
+     */
+    public static final int MAX_DISK_CACHE_SIZE = 50 * ByteConstants.MB;
 
-    public static final int MAX_DISK_CACHE_VERYLOW_SIZE = 10 * ByteConstants.MB;//默认图极低磁盘空间缓存的最大值
-    public static final int MAX_DISK_CACHE_LOW_SIZE = 30 * ByteConstants.MB;//默认图低磁盘空间缓存的最大值
-    public static final int MAX_DISK_CACHE_SIZE = 50 * ByteConstants.MB;//默认图磁盘缓存的最大值
-
-
-    private static final String IMAGE_PIPELINE_SMALL_CACHE_DIR = "imagepipeline_cache";//小图所放路径的文件夹名
-    private static final String IMAGE_PIPELINE_CACHE_DIR = "imagepipeline_cache";//默认图所放路径的文件夹名
+    /**
+     * 小图所放路径的文件夹名
+     */
+    private static final String IMAGE_PIPELINE_SMALL_CACHE_DIR = "imagepipeline_cache";
+    /**
+     * 默认图所放路径的文件夹名
+     */
+    private static final String IMAGE_PIPELINE_CACHE_DIR = "imagepipeline_cache";
 
     private static ImagePipelineConfig sImagePipelineConfig;
 
@@ -88,7 +117,7 @@ public class FrescoConfig {
 
         //默认图片的磁盘配置
         DiskCacheConfig diskCacheConfig;
-        if (!SDUtil.ExistSDCard()) {
+        if (!SdUtil.existSDCard()) {
             diskSmallCacheConfig = DiskCacheConfig.newBuilder(context)
                     .setBaseDirectoryPath(new File(FileManager.getPictureMinCachePath(context)))
                     .setBaseDirectoryName(IMAGE_PIPELINE_SMALL_CACHE_DIR)
@@ -171,12 +200,15 @@ public class FrescoConfig {
     public static GenericDraweeHierarchy getCustomPlaceholderGenericDraweeHierarchy(Context context, RoundingParams roundingParams, int iconPlaceHolderID, int iconFailureId) {
         GenericDraweeHierarchyBuilder gdhBuilder = new GenericDraweeHierarchyBuilder(context.getResources());
         gdhBuilder.setActualImageScaleType(ScalingUtils.ScaleType.FIT_CENTER);
-        if (roundingParams != null)
+        if (roundingParams != null) {
             gdhBuilder.setRoundingParams(roundingParams);
-        if (iconFailureId > 0)
+        }
+        if (iconFailureId > 0) {
             gdhBuilder.setFailureImage(ContextCompat.getDrawable(context, iconFailureId), ScalingUtils.ScaleType.FIT_CENTER);
-        if (iconPlaceHolderID > 0)
+        }
+        if (iconPlaceHolderID > 0) {
             gdhBuilder.setPlaceholderImage(ContextCompat.getDrawable(context, iconPlaceHolderID), ScalingUtils.ScaleType.FIT_CENTER);
+        }
         return gdhBuilder.setFadeDuration(1000).build();
     }
 
@@ -223,7 +255,6 @@ public class FrescoConfig {
         //更多图片变换请查看https://github.com/wasabeef/fresco-processors
         return builder.build();
     }
-
 
 
     public static DraweeController getDraweeController(HImageView imageView, String url) {
