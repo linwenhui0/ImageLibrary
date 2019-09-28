@@ -18,7 +18,6 @@ class ImageManager : IImageAccessor {
 
     companion object {
         private var instance: ImageManager? = null
-         var debug:Boolean = BuildConfig.DEBUG
         fun getInstance(context: Context): ImageManager {
             if (instance == null) {
                 synchronized(ImageManager::class) {

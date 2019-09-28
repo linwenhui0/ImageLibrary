@@ -4,7 +4,8 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
-import android.support.v4.content.ContextCompat;
+
+import androidx.core.content.ContextCompat;
 
 import com.facebook.cache.disk.DiskCacheConfig;
 import com.facebook.common.internal.Supplier;
@@ -117,16 +118,16 @@ public class FrescoConfig {
 
         //默认图片的磁盘配置
         DiskCacheConfig diskCacheConfig;
-        if (!SdUtil.existSDCard()) {
+        if (!SdUtil.INSTANCE.existSDCard()) {
             diskSmallCacheConfig = DiskCacheConfig.newBuilder(context)
-                    .setBaseDirectoryPath(new File(FileManager.getPictureMinCachePath(context)))
+                    .setBaseDirectoryPath(new File(FileManager.INSTANCE.getPictureMinCachePath(context)))
                     .setBaseDirectoryName(IMAGE_PIPELINE_SMALL_CACHE_DIR)
                     .setMaxCacheSize(FrescoConfig.MAX_DISK_CACHE_SIZE)
                     .setMaxCacheSizeOnLowDiskSpace(MAX_SMALL_DISK_LOW_CACHE_SIZE)
                     .setMaxCacheSizeOnVeryLowDiskSpace(MAX_SMALL_DISK_VERYLOW_CACHE_SIZE)
                     .build();
             diskCacheConfig = DiskCacheConfig.newBuilder(context)
-                    .setBaseDirectoryPath(new File(FileManager.getPictureCachePath(context)))
+                    .setBaseDirectoryPath(new File(FileManager.INSTANCE.getPictureCachePath(context)))
                     .setBaseDirectoryName(IMAGE_PIPELINE_CACHE_DIR)
                     .setMaxCacheSize(FrescoConfig.MAX_DISK_CACHE_SIZE)
                     .setMaxCacheSizeOnLowDiskSpace(MAX_DISK_CACHE_LOW_SIZE)

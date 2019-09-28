@@ -2,8 +2,9 @@ package com.hdlang.image.test;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.hlibrary.image.ImageManager;
 import com.hlibrary.image.listener.IImageDownListener;
@@ -15,6 +16,7 @@ import java.io.File;
 import java.io.IOException;
 
 import pl.droidsonroids.gif.GifDrawable;
+
 
 public class MainActivity extends AppCompatActivity {
     private final static String URL = "http://cms-bucket.nosdn.127.net/2018/08/06/110d3bb132804ba6b1eefd8c16801ca5.jpeg";
@@ -66,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onError(@NotNull String msg) {
-                        Logger.getInstance().defaultTagD(msg);
+                        Logger.Companion.getInstance().defaultTagD(msg);
                     }
                 });
     }

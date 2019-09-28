@@ -14,7 +14,6 @@ import com.facebook.drawee.generic.RoundingParams
 import com.facebook.drawee.view.DraweeHolder
 import com.facebook.imagepipeline.core.ImagePipelineFactory
 import com.facebook.imagepipeline.request.ImageRequestBuilder
-import com.hlibrary.image.ImageManager
 import com.hlibrary.image.fresco.FrescoConfig
 import com.hlibrary.image.fresco.ImageDownImp
 import com.hlibrary.image.listener.IImageAccessor
@@ -41,8 +40,7 @@ class FrescoAccessor : IImageAccessor {
     }
 
     override fun load(v: View, url: String, cornersRadius: Float, emptyRes: Int, failureRes: Int): Boolean {
-        if (ImageManager.debug)
-            Logger.getInstance().defaultTagD("url = $url , view = ${v.toString()}")
+        Logger.instance.defaultTagD("url = $url , view = ${v.toString()}")
         if (TextUtils.isEmpty(url))
             return false
         if (v is HImageView) {
@@ -89,8 +87,7 @@ class FrescoAccessor : IImageAccessor {
     }
 
     override fun load(v: View, file: File): Boolean {
-        if (ImageManager.debug)
-            Logger.getInstance().defaultTagD("url = ${file.absolutePath} , view = ${v.toString()}")
+        Logger.instance.defaultTagD("url = ${file.absolutePath} , view = ${v.toString()}")
         if (!file.exists())
             return false
         if (v is HImageView) {
@@ -109,8 +106,8 @@ class FrescoAccessor : IImageAccessor {
     }
 
     override fun load(url: String, obj: Any, imageDownListener: IImageDownListener) {
-        if (ImageManager.debug)
-            Logger.getInstance().defaultTagD("url = $url")
+
+        Logger.instance.defaultTagD("url = $url")
         val uri = Uri.parse(url)
         val imageRequest = ImageRequestBuilder.newBuilderWithSource(uri)
                 .setProgressiveRenderingEnabled(true).build()

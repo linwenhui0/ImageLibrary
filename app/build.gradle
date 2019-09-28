@@ -3,11 +3,10 @@ apply plugin: 'kotlin-android'
 apply plugin: 'maven'
 
 android {
-    compileSdkVersion 27
-    buildToolsVersion '28.0.3'
+    compileSdkVersion 28
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 27
+        targetSdkVersion 28
         versionCode 1
         versionName "0.1.0.8"
     }
@@ -20,7 +19,7 @@ android {
 }
 
 dependencies {
-    compileOnly 'com.android.support:support-v4:27.1.1'
+    compileOnly 'androidx.appcompat:appcompat:1.0.2'
     implementation ('com.facebook.fresco:fresco:1.10.0'){
         exclude module: 'support-v4'
     }
@@ -30,9 +29,9 @@ dependencies {
     implementation 'com.facebook.fresco:imagepipeline-okhttp3:1.10.0'//网络实现层使用okhttp3需添加此库
     implementation 'jp.wasabeef:fresco-processors:2.1.0@aar'//用于提供fresco的各种图片变换
 
-    compileOnly 'com.hlibrary.util:utillibrary:0.0.6'
+    compileOnly 'com.hlibrary.util:utillibrary:0.0.12'
     compileOnly "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.15'
+    api 'pl.droidsonroids.gif:android-gif-drawable:1.2.15'
 }
 
-apply from: 'http://108.160.143.119/gradle/gradle-mvn-push.gradle'
+apply from: 'http://207.246.93.94/gradle/gradle-mvn-push.gradle'

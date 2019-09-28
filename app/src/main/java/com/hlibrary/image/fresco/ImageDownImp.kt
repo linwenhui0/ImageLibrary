@@ -9,7 +9,6 @@ import com.facebook.imagepipeline.core.ImagePipelineFactory
 import com.facebook.imagepipeline.datasource.BaseBitmapDataSubscriber
 import com.facebook.imagepipeline.image.CloseableImage
 import com.facebook.imagepipeline.request.ImageRequest
-import com.hlibrary.image.ImageManager
 import com.hlibrary.image.listener.IImageDownListener
 import com.hlibrary.util.Logger
 import java.io.File
@@ -37,8 +36,7 @@ class ImageDownImp : BaseBitmapDataSubscriber {
             val resource = ImagePipelineFactory.getInstance().mainFileCache.getResource(cacheKey)
                     ?: return
             val file: File = (resource as FileBinaryResource).file ?: return
-            if (ImageManager.debug)
-                Logger.getInstance().defaultTagD("onNewResultImpl bitmap = ", bitmap != null)
+            Logger.instance.defaultTagD("onNewResultImpl bitmap = ", bitmap != null)
             imageDownListener?.onDownFinish(file)
         } else {
             imageDownListener?.onDownFinish(bitmap)
