@@ -7,12 +7,12 @@ import com.hlibrary.image.listener.IImageAccessor
 import com.hlibrary.image.listener.IImageDownListener
 import java.io.File
 
-class ImageManager : IImageAccessor {
+class ImageManager private constructor(context: Context) : IImageAccessor {
 
 
     private var imageAccessor: IImageAccessor? = null
 
-    private constructor(context: Context) {
+    init {
         imageAccessor = FrescoAccessor(context)
     }
 
@@ -31,15 +31,16 @@ class ImageManager : IImageAccessor {
     }
 
     override fun init() {
-        if (!hasBeenInit())
+        if (hasBeenInit() != true) {
             imageAccessor?.init()
+        }
     }
 
-    override fun hasBeenInit(): Boolean {
-        return imageAccessor?.hasBeenInit()!!
+    override fun hasBeenInit(): Boolean? {
+        return imageAccessor?.hasBeenInit()
     }
 
-    override fun load(v: View, url: String, cornersRadius: Float, emptyRes: Int, failureRes: Int): Boolean {
+    override fun load(v: View, url: String?, cornersRadius: Float, emptyRes: Int, failureRes: Int): Boolean {
         return imageAccessor?.load(v, url, cornersRadius, emptyRes, failureRes)!!
     }
 
@@ -47,7 +48,7 @@ class ImageManager : IImageAccessor {
         return imageAccessor?.load(v, file)!!
     }
 
-    override fun load(url: String, obj: Any, imageDownListener: IImageDownListener) {
+    override fun load(url: String?, obj: Any, imageDownListener: IImageDownListener) {
         imageAccessor?.load(url, obj, imageDownListener)
     }
 

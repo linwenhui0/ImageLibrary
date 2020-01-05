@@ -24,8 +24,8 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation project(':app')
-    implementation 'com.hlibrary.util:utillibrary:0.0.12'
-    implementation 'com.alibaba:fastjson:1.2.51'
-    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation 'com.hlibrary.util:utillibrary:0.0.22'
+    implementation 'com.alibaba:fastjson:1.2.61'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }

@@ -23,13 +23,7 @@ import com.hlibrary.util.Logger
 import java.io.File
 
 
-class FrescoAccessor : IImageAccessor {
-
-    private var context: Context? = null
-
-    constructor(context: Context) {
-        this.context = context.applicationContext
-    }
+class FrescoAccessor(private val context: Context) : IImageAccessor {
 
     override fun init() {
         Fresco.initialize(context, FrescoConfig.getImagePipelineConfig(context))
@@ -39,18 +33,17 @@ class FrescoAccessor : IImageAccessor {
         return Fresco.hasBeenInitialized()
     }
 
-    override fun load(v: View, url: String, cornersRadius: Float, emptyRes: Int, failureRes: Int): Boolean {
-        Logger.instance.defaultTagD("url = $url , view = ${v.toString()}")
+    override fun load(v: View, url: String?, cornersRadius: Float, emptyRes: Int, failureRes: Int): Boolean {
         if (TextUtils.isEmpty(url))
             return false
         if (v is HImageView) {
             val controller = FrescoConfig.getDraweeController(v, url)
             v.controller = controller
-            var roundingParams = RoundingParams()
+            val roundingParams = RoundingParams()
             if (cornersRadius < 0) {
-                roundingParams.setRoundAsCircle(true)
+                roundingParams.roundAsCircle = true
             } else {
-                roundingParams.setRoundAsCircle(false)
+                roundingParams.roundAsCircle = false
                 roundingParams.setCornersRadius(cornersRadius)
             }
             v.hierarchy = FrescoConfig.getCustomPlaceholderGenericDraweeHierarchy(context, roundingParams,
@@ -87,7 +80,6 @@ class FrescoAccessor : IImageAccessor {
     }
 
     override fun load(v: View, file: File): Boolean {
-        Logger.instance.defaultTagD("url = ${file.absolutePath} , view = ${v.toString()}")
         if (!file.exists())
             return false
         if (v is HImageView) {
@@ -96,7 +88,7 @@ class FrescoAccessor : IImageAccessor {
             v.hierarchy = FrescoConfig.getGenericDraweeHierarchy(context)
             return true
         }
-        var bitmap = BitmapFactory.decodeFile(file.absolutePath)
+        val bitmap = BitmapFactory.decodeFile(file.absolutePath)
         if (v is ImageView) {
             v.setImageBitmap(bitmap)
         } else {
@@ -105,7 +97,7 @@ class FrescoAccessor : IImageAccessor {
         return false
     }
 
-    override fun load(url: String, obj: Any, imageDownListener: IImageDownListener) {
+    override fun load(url: String?, obj: Any, imageDownListener: IImageDownListener) {
 
         Logger.instance.defaultTagD("url = $url")
         val uri = Uri.parse(url)
@@ -115,8 +107,8 @@ class FrescoAccessor : IImageAccessor {
         val dataSource = imagePipeline.fetchDecodedImage(imageRequest, this)
         dataSource.subscribe(ImageDownImp(imageRequest, imageDownListener),
                 UiThreadImmediateExecutorService.getInstance())
-        var hierarchy = FrescoConfig.getGenericDraweeHierarchy(context)
-        var draweeHolder = DraweeHolder.create(hierarchy, context)
+        val hierarchy = FrescoConfig.getGenericDraweeHierarchy(context)
+        val draweeHolder = DraweeHolder.create(hierarchy, context)
         val controller = Fresco.newDraweeControllerBuilder()
                 .setOldController(draweeHolder.controller)
                 .setImageRequest(imageRequest)
@@ -126,6 +118,6 @@ class FrescoAccessor : IImageAccessor {
     }
 
     override fun clearMemoryCache() {
-        ImagePipelineFactory.getInstance().getImagePipeline().clearMemoryCaches()
+        ImagePipelineFactory.getInstance().imagePipeline.clearMemoryCaches()
     }
 }

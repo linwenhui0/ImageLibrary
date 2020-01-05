@@ -19,9 +19,9 @@ import pl.droidsonroids.gif.GifDrawable;
 
 
 public class MainActivity extends AppCompatActivity {
-    private final static String URL = "http://cms-bucket.nosdn.127.net/2018/08/06/110d3bb132804ba6b1eefd8c16801ca5.jpeg";
+//    private final static String URL = "http://cms-bucket.nosdn.127.net/2018/08/06/110d3bb132804ba6b1eefd8c16801ca5.jpeg";
 //    private final static String URL = "http://a.hiphotos.baidu.com/image/h%3D300/sign=4a51c9cd7e8b4710d12ffbccf3ccc3b2/b64543a98226cffceee78e5eb5014a90f703ea09.jpg";
-//    private final static String URL = "http://cms-bucket.nosdn.127.net/catchpic/c/c9/c9321d0844f24b2a83303502c1fe62af.gif";
+    private final static String URL = "http://cms-bucket.nosdn.127.net/catchpic/c/c9/c9321d0844f24b2a83303502c1fe62af.gif";
 
 
     ImageManager imageManager;
@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         imageManager = ImageManager.Companion.getInstance(this);
         imageManager.init();
         setContentView(R.layout.activity_main);
-        load2();
+        load1();
     }
 
     private void load1() {

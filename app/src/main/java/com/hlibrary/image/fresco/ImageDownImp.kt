@@ -24,7 +24,7 @@ class ImageDownImp : BaseBitmapDataSubscriber {
         this.imageDownListener = imageDownListener
     }
 
-    override fun onFailureImpl(dataSource: DataSource<CloseableReference<CloseableImage>>?) {
+    override fun onFailureImpl(dataSource: DataSource<CloseableReference<CloseableImage>>) {
         imageDownListener?.onError("下载照片失败")
     }
 
