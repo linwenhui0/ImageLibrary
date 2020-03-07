@@ -21,7 +21,7 @@ allprojects {
         jcenter()
         google()
         maven {
-            url 'http://108.61.177.84:8081/nexus/content/groups/public/'
+            url 'https://git.oschina.net/companycode/mvn-repo/raw/master/releases/'
         }
     }
 }

@@ -1,6 +1,5 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'maven'
 
 android {
     compileSdkVersion 28
@@ -27,9 +26,11 @@ dependencies {
     implementation 'com.facebook.fresco:imagepipeline-okhttp3:2.1.0'//网络实现层使用okhttp3需添加此库
     implementation 'jp.wasabeef:fresco-processors:2.1.0'//用于提供fresco的各种图片变换
 
-    compileOnly 'com.hlibrary.util:utillibrary:0.0.22'
+    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.19'
+
+    compileOnly 'com.hlibrary.util:utillibrary:0.0.26'
     compileOnly "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    api 'pl.droidsonroids.gif:android-gif-drawable:1.2.15'
+
 }
 
-apply from: 'http://108.61.177.84/gradle/gradle-mvn-push.gradle'
+apply from: 'http://139.180.212.139/gradle/gradle-mvn-push.gradle'

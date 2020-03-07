@@ -25,8 +25,6 @@ import com.facebook.imagepipeline.request.ImageRequestBuilder
 import com.hlibrary.image.R
 import com.hlibrary.image.fresco.controller.CalHeightController
 import com.hlibrary.image.view.HImageView
-import com.hlibrary.util.file.FileManager.getPictureCachePath
-import com.hlibrary.util.file.FileManager.getPictureMinCachePath
 import com.hlibrary.util.file.SdUtil.existSDCard
 import jp.wasabeef.fresco.processors.CombinePostProcessors
 import jp.wasabeef.fresco.processors.GrayscalePostprocessor
@@ -72,11 +70,11 @@ object FrescoConfig {
     /**
      * 小图所放路径的文件夹名
      */
-    private const val IMAGE_PIPELINE_SMALL_CACHE_DIR = "imagepipeline_cache"
+    private const val IMAGE_PIPELINE_SMALL_CACHE_DIR = "image_small_cache"
     /**
      * 默认图所放路径的文件夹名
      */
-    private const val IMAGE_PIPELINE_CACHE_DIR = "imagepipeline_cache"
+    private const val IMAGE_PIPELINE_CACHE_DIR = "image_cache"
     private var sImagePipelineConfig: ImagePipelineConfig? = null
     fun getImagePipelineConfig(context: Context): ImagePipelineConfig? {
         if (sImagePipelineConfig == null) {
@@ -100,14 +98,14 @@ object FrescoConfig {
         val diskCacheConfig: DiskCacheConfig
         if (!existSDCard()) {
             diskSmallCacheConfig = DiskCacheConfig.newBuilder(context)
-                    .setBaseDirectoryPath(File(getPictureMinCachePath(context)))
+                    .setBaseDirectoryPath(context.cacheDir)
                     .setBaseDirectoryName(IMAGE_PIPELINE_SMALL_CACHE_DIR)
                     .setMaxCacheSize(MAX_DISK_CACHE_SIZE.toLong())
                     .setMaxCacheSizeOnLowDiskSpace(MAX_SMALL_DISK_LOW_CACHE_SIZE.toLong())
                     .setMaxCacheSizeOnVeryLowDiskSpace(MAX_SMALL_DISK_VERYLOW_CACHE_SIZE.toLong())
                     .build()
             diskCacheConfig = DiskCacheConfig.newBuilder(context)
-                    .setBaseDirectoryPath(File(getPictureCachePath(context)))
+                    .setBaseDirectoryPath(context.cacheDir)
                     .setBaseDirectoryName(IMAGE_PIPELINE_CACHE_DIR)
                     .setMaxCacheSize(MAX_DISK_CACHE_SIZE.toLong())
                     .setMaxCacheSizeOnLowDiskSpace(MAX_DISK_CACHE_LOW_SIZE.toLong())
@@ -115,14 +113,14 @@ object FrescoConfig {
                     .build()
         } else {
             diskSmallCacheConfig = DiskCacheConfig.newBuilder(context)
-                    .setBaseDirectoryPath(context.cacheDir)
+                    .setBaseDirectoryPath(context.externalCacheDir)
                     .setBaseDirectoryName(IMAGE_PIPELINE_SMALL_CACHE_DIR)
                     .setMaxCacheSize(MAX_DISK_CACHE_SIZE.toLong())
                     .setMaxCacheSizeOnLowDiskSpace(MAX_SMALL_DISK_LOW_CACHE_SIZE.toLong())
                     .setMaxCacheSizeOnVeryLowDiskSpace(MAX_SMALL_DISK_VERYLOW_CACHE_SIZE.toLong())
                     .build()
             diskCacheConfig = DiskCacheConfig.newBuilder(context)
-                    .setBaseDirectoryPath(context.cacheDir)
+                    .setBaseDirectoryPath(context.externalCacheDir)
                     .setBaseDirectoryName(IMAGE_PIPELINE_CACHE_DIR)
                     .setMaxCacheSize(MAX_DISK_CACHE_SIZE.toLong())
                     .setMaxCacheSizeOnLowDiskSpace(MAX_DISK_CACHE_LOW_SIZE.toLong())
