@@ -28,7 +28,7 @@ dependencies {
 
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.19'
 
-    compileOnly 'com.hlibrary.util:utillibrary:0.0.26'
+    compileOnly 'com.github.linwenhui0:UtilLibary:0.0.26'
     compileOnly "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
 }
